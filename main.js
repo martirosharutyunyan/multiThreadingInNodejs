@@ -45,19 +45,24 @@ const sortResults = results => {
     return quicksort(sortedResults);
 }
 
-new Promise((res, rej) => {
-    let allResults = []
-    workers.forEach((worker, i) => {
-        worker.send({ task:task[i] })
-        worker.on('exit', console.log)
-        worker.on('message', message => {
-            allResults.push(message.results)
-            if (allResults.length === cpuCount) {
-                res(sortResults(allResults))
-            };
+
+const calculations = task => {
+    return new Promise((res, rej) => {
+        let allResults = []
+        workers.forEach((worker, i) => {
+            worker.send({ task:task[i] })
+            worker.on('exit', console.log)
+            worker.on('message', message => {
+                allResults.push(message.results)
+                if (allResults.length === cpuCount) {
+                    res(sortResults(allResults))
+                };
+            })
         })
     })
-}).then(res => {
+}
+
+calculations(task).then(res => {
     console.log(res)
     process.exit(0)
 })
