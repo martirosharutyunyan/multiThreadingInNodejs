@@ -17,28 +17,26 @@ const workers = getWorkers('./worker.js', cpuCount);
 
 
 // separate Tasks to array 
-const tasks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const tasks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 const separateTasksToArray = tasks => {
-    const countOfSeparateTasks = Math.ceil(tasks.length / cpuCount)
     let $ = 0
     const task = []
-    for (let i = 0; i < cpuCount; i++) {
-        let oneTask = []
-        for (let j = 0; j < countOfSeparateTasks; j++) {
-            oneTask.push(tasks[j + $])
+    for (let i = 0; i < tasks.length; i++) {
+        if (cpuCount <= i) {
+            task[$].push(tasks[i])
+            $++
+            continue;
         };
-        $+= countOfSeparateTasks
-        task.push(oneTask)
+        task.push([tasks[i]])
     };
     return task;
 }
 const task = separateTasksToArray(tasks)
 
-
-// get, filter null values and sort results
+// get values and sort results
 const clearResults = results => {
     const clearedResults = []
-    results.forEach(e => e.forEach(i => i ? clearedResults.push(i) : null))
+    results.forEach(e => e.forEach(i => clearedResults.push(i)))
     return quicksort(clearedResults);
 }
 
