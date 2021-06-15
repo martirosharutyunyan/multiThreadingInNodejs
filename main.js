@@ -1,10 +1,13 @@
 const os = require('os');
 const cp = require('child_process');
 const quicksort = require('./quicksort')
+
+
+// count of cpu threads
 const cpuCount = os.cpus().length
 
 
-// get workers
+// create workers for every thread
 const getWorkers = (workerFilePath, cpuCount) => {
     const workers = []
     for (let i = 0; i < cpuCount; i++) {
@@ -32,12 +35,14 @@ const separateTasksToArray = tasks => {
     return task;
 }
 const task = separateTasksToArray(tasks)
+console.log(task)
+
 
 // get values and sort results
-const clearResults = results => {
-    const clearedResults = []
-    results.forEach(e => e.forEach(i => clearedResults.push(i)))
-    return quicksort(clearedResults);
+const sortResults = results => {
+    const sortedResults = []
+    results.forEach(e => e.forEach(i => sortedResults.push(i)))
+    return quicksort(sortedResults);
 }
 
 new Promise((res, rej) => {
@@ -48,7 +53,7 @@ new Promise((res, rej) => {
         worker.on('message', message => {
             allResults.push(message.results)
             if (allResults.length === cpuCount) {
-                res(clearResults(allResults))
+                res(sortResults(allResults))
             };
         })
     })
