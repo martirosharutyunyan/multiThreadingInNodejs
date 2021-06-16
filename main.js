@@ -21,19 +21,18 @@ const workers = getWorkers('./worker.js', cpuCount);
 
 // generate tasks
 const tasks = []
-for (let i = 0; i < 40; i++) {
+for (let i = 0; i < 43; i++) {
     tasks.push(i)
 }; 
 
-// separate array to matrix with sizes 
-const separateTasksToArray = tasks => {
+// separate array to matrix with sizes (Math.ceil(tasks.length / cpuCount)) x cpuCount  
+const separateTasksToMatrix = tasks => {
     let $ = 0
     const task = []
     for (let i = 0; i < tasks.length; i++) {
         if (cpuCount <= i) {
             if($ === cpuCount){
                 $ = 0
-                continue
             }
             task[$].push(tasks[i])
             $++
@@ -43,8 +42,7 @@ const separateTasksToArray = tasks => {
     };
     return task;
 }
-const task = separateTasksToArray(tasks)
-
+const task = separateTasksToMatrix(tasks)
 
 // get values and sort results
 const sortResults = results => {
