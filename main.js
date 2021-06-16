@@ -68,6 +68,7 @@ const calculations = task => {
     })
 }
 
+// get and log the results and exit from process
 calculations(task).then(res => {
     console.log(res)
     process.exit(0)
