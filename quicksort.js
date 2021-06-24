@@ -1,4 +1,4 @@
-function quicksort(array) {
+const quicksort = array => {
     if (array.length < 2) {
         return array;
     };
